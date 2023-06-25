@@ -1,40 +1,37 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Order;
-use App\Kit;
-use App\Patient;
+use App\Models\Order;
+use App\Models\Kit;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller as BaseController;
 
-class OrderController extends BaseController
+
+class OrderController extends Controller
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function index()
+    // Get all orders
+    public function getAllOrders()
     {
-        $orders = Order::orderBy('created_at', 'desc')->get();
+        $orders = Order::with('kit', 'patient')->orderBy('created_at', 'desc')->get();
 
-        // return view('orders.index', compact('orders'));
-
+        return response()->json($orders);
     }
 
-    public function show(Order $order)
+    // Get order by ID
+    public function getOrder($id)
     {
-        return view('orders.show', compact('order'));
+        $order = Order::with('kit', 'patient')->find($id);
+
+        return response()->json($order);
     }
 
-    public function create()
-    {
-        $kits = Kit::all();
-        // return view('orders.create', compact('kits'));
-
-    }
-
-    public function store(Request $request)
+    // Create Order
+    public function create(Request $request)
     {
         $validatedData = $request->validate([
             'kit_id' => 'required',
@@ -51,7 +48,7 @@ class OrderController extends BaseController
         $order->paid = $validatedData['paid'];
         $order->save();
 
-        // return redirect('/orders')->with('success', 'Order created successfully.');
+        return response()->json(['message' => 'Order created.']);
     }
 
 }

@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\{
+    OrderController,
+    PatientController,
+    KitController};
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +23,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/orders', 'OrderController@index');
-Route::get('/orders/{order}', 'OrderController@show');
-Route::get('/orders/create', 'OrderController@create');
-Route::post('/orders', 'OrderController@store');
+Route::get('/token', function () {
+    return csrf_token(); 
+});
+
+Route::get('/orders', [OrderController::class, 'getAllOrders'] );
+Route::get('/orders/{id}', [OrderController::class, 'getOrder']);
+Route::post('/orders/create', [OrderController::class, 'create']);
