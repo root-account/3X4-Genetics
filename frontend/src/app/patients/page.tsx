@@ -52,8 +52,8 @@ export default function Patients() {
                   <td >{patient?.name} {patient?.surname}</td>
                   <td>{patient?.email}</td>
                   <td>{patient?.phone}</td>
-                  <td>R{patient?.address}</td>
-                  <td>R{patient?.created_at}</td>
+                  <td>{patient?.address}</td>
+                  <td>{patient?.created_at}</td>
                 </tr>
               ))}
             </tbody>
