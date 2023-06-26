@@ -8,18 +8,9 @@ export default function Kits() {
     
   const [kits, setKits] = useState([]);
 
-  const [formData, setFormData] = useState({
-    patient_email: '',
-    patient_name: '',
-    kit_id: '',
-    paid: false,
-  });
-
   useEffect(() => {
     fetchKits();
   }, []);
-
-
 
   // Fetch Kits  
   const fetchKits = async () => {

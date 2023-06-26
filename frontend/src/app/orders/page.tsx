@@ -23,14 +23,6 @@ export default function Orders() {
 
   useEffect(() => {
 
-    // setFormData((prevFormData) => ({
-    //   ...prevFormData,
-    //   patient_email: '',
-    //   patient_name: '',
-    //   kit_id: kits[0]?.id,
-    //   paid: false,
-    // }));
-
     setFormData({
       patient_email: '',
       patient_name: '',
@@ -66,6 +58,7 @@ export default function Orders() {
     }
   };
 
+  // Create an order
   const createOrder = async () => {
 
     if (formData?.patient_email == "") {  
@@ -73,7 +66,6 @@ export default function Orders() {
 
         return;
     }
-
 
     try {
       const response = await axios.post(
