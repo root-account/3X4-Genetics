@@ -7,7 +7,6 @@ Initially I started the project purely in laravel using the laravel views and te
 # API setup
 To setup and Run the API follow these steps
 
-- To setup the API
 - Put the API files on the server
 - Then create a database then put your database details in the .env file
 - To create the DB tables Run the command 
