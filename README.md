@@ -7,9 +7,16 @@ To setup and Run the API follow these steps
 
 - To setup the API
 - Put the API files on the server
-- First create a database then put your database details in the .env file
-- Run the command 'php artisan migrate'  to create the DB tables
-- Run the command 'php artisan db:seed' to seed the DB with fake data
+- Then create a database then put your database details in the .env file
+- To create the DB tables Run the command 
+```bash 
+    php artisan migrate
+```  
+
+- To seed the DB with fake data Run the command
+```bash 
+    php artisan db:seed
+``` 
 
 
 
@@ -17,14 +24,14 @@ To setup and Run the API follow these steps
 To setup and Run the front end follow these steps
 
 - Got to the frontend folder
-- remember to point the frontend to the correct api url in the .env.local file
-- First run
+- Open the project folder on the terminal then first run
 ```bash
 npm install
 ```
-- Then run
+- And then run
 ```bash
 npm run dev
 ```
 
 - The project will start 
+- remember to point the frontend to the correct api url in the .env.local file
