@@ -34,6 +34,26 @@ export default function Orders() {
 
   }, [kits]);
 
+  function formatDate(originalDate:string){
+    // const originalDate = "2023-06-26T13:08:46.000000Z";
+    const dateObject = new Date(originalDate);
+
+    const formattedDate = dateObject.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+    const formattedTime = dateObject.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+    });
+
+    const formattedDateTime = `${formattedDate} - ${formattedTime}`;
+
+    return formattedDateTime;
+  }
+
   // Fetch Orders  
   const fetchOrders = async () => {
     try {
@@ -179,7 +199,7 @@ export default function Orders() {
               {orders.map((order, index) => (
                 <tr key={order?.id}>
                   <th scope="row">{order?.id}</th>
-                  <td>{order?.created_at}</td>
+                  <td>{ formatDate(order?.created_at)}</td>
                   <td>{order?.patient?.name} {order?.patient?.surname}</td>
                   <td>{order?.patient?.email}</td>
                   <td>{order?.kit?.name}</td>
