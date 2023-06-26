@@ -35,17 +35,21 @@ class OrderController extends Controller
     {
         $validatedData = $request->validate([
             'kit_id' => 'required',
-            'patient_name' => 'required',
             'patient_email' => 'required|email',
             'paid' => 'required|boolean',
         ]);
 
-        $patient = Patient::firstOrCreate(['email' => $validatedData['patient_email']], ['name' => $validatedData['patient_name']]);
+        $patient = Patient::firstOrCreate(['email' => $validatedData['patient_email']], ['name' => $request->patient_name]);
         
+        $paid = 0;
+        if($validatedData['paid']) {
+            $paid = 1;
+        }
+
         $order = new Order;
         $order->kit_id = $validatedData['kit_id'];
         $order->patient_id = $patient->id;
-        $order->paid = $validatedData['paid'];
+        $order->paid = $paid;
         $order->save();
 
         return response()->json(['message' => 'Order created.']);

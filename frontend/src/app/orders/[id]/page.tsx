@@ -4,18 +4,48 @@ import Link from 'next/link'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 
+import { useParams } from 'next/navigation'
+
 export default function OrderView() {
+
+  const params = useParams();
+
+  const id = params.id;
+
+  const [order, setOrder] = useState([]);
+
+  useEffect(() => {
+    fetchOrder();
+
+    console.log(params);
+    
+  }, []);
+
+
+  // Fetch order  
+  const fetchOrder = async () => {
+    try {
+      const response = await axios.get(`http://localhost/3x4-Genetics/laravel/public/api/orders/${id}`);
+      const orderData = response.data;
+      setOrder(orderData);
+      console.log(orderData);
+      
+    } catch (error) {
+      console.error('Error fetching order:', error);
+    }
+  };
+
     return (
 
         <>
         
-        <h1>Orders No: </h1>
+        <h1>Order: {id}</h1>
 
         <div className='row'>
         <div className='col'>
           
           <table className="table table-striped">
-            <thead>
+            {/* <thead>
               <tr>
                 <th scope="col">#</th>
                 <th scope="col">Date</th>
@@ -25,19 +55,45 @@ export default function OrderView() {
                 <th scope="col">Price</th>
                 <th scope="col"></th>
               </tr>
-            </thead>
+            </thead> */}
             <tbody>
                 <tr key={order?.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{order?.created_at}</td>
-                  <td>{order?.patient?.name} {order?.patient?.surname}</td>
-                  <td>{order?.patient?.email}</td>
-                  <td>{order?.kit?.name}</td>
-                  <td>R{order?.kit?.price}</td>
-                  <td>
-                    <Link href={`/orders/${order?.id}`} className="btn btn-primary mb-3">View</Link>
-                  </td>
+                  <th scope="col">#</th>
+                  <th scope="">{order?.id}</th>
                 </tr>
+                <tr key={order?.id}>
+                  <th scope="col">Status</th>
+                  <th scope="">{order?.paid == 1 ? 'Paid' : 'Not Paid'}</th>
+                </tr>
+                <tr>
+                  <th scope="col">Date</th>
+                  <td>{order?.created_at}</td>
+                </tr>
+                <tr>
+                  <th scope="col">Patient name</th>
+                  <td>{order?.patient?.name} {order?.patient?.surname}</td>
+                </tr>
+                <tr>
+                  <th scope="col">Email</th>
+                  <td>{order?.patient?.email}</td>
+                </tr>
+                <tr>
+                  <th scope="col">Address</th>
+                  <td>{order?.patient?.address}</td>
+                </tr>
+                <tr>
+                  <th scope="col">Product</th>
+                  <td>{order?.kit?.name}</td>
+                </tr>
+                <tr>
+                  <th scope="col">Product Desc</th>
+                  <td>{order?.kit?.description}</td>
+                </tr>
+                <tr>
+                <th scope="col">Product Price</th>
+                  <td>R{order?.kit?.price}</td>
+                </tr>
+
             </tbody>
           </table>
 

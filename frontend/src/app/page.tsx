@@ -12,7 +12,7 @@ export default function Home() {
       <div className="d-grid gap-2 d-md-block">
         <Link className="btn btn-outline-primary" href={'/orders'}>View Orders</Link>
 
-        <Link className="btn btn-outline-success" href={'/orders'}>View Kits</Link>
+        <Link className="btn btn-outline-success" href={'/kits'}>View Kits</Link>
       </div>
 
     </>

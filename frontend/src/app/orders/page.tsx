@@ -21,6 +21,25 @@ export default function Orders() {
     fetchKits();
   }, []);
 
+  useEffect(() => {
+
+    // setFormData((prevFormData) => ({
+    //   ...prevFormData,
+    //   patient_email: '',
+    //   patient_name: '',
+    //   kit_id: kits[0]?.id,
+    //   paid: false,
+    // }));
+
+    setFormData({
+      patient_email: '',
+      patient_name: '',
+      kit_id: kits[0]?.id,
+      paid: false,
+    });
+
+  }, [kits]);
+
   // Fetch Orders  
   const fetchOrders = async () => {
     try {
@@ -78,6 +97,8 @@ export default function Orders() {
     } catch (error) {
       console.error('Error creating order:', error);
       alert('Error creating order');
+      console.log(formData);
+      
     }
   };
 
@@ -88,9 +109,6 @@ export default function Orders() {
       ...prevFormData,
       [name]: fieldValue,
     }));
-
-
-    console.log(name+' | '+fieldValue);
     
   };
 
@@ -159,18 +177,20 @@ export default function Orders() {
                 <th scope="col">Email</th>
                 <th scope="col">Product</th>
                 <th scope="col">Price</th>
+                <th scope="col">Status</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
               {orders.map((order, index) => (
                 <tr key={order?.id}>
-                  <th scope="row">{index + 1}</th>
+                  <th scope="row">{order?.id}</th>
                   <td>{order?.created_at}</td>
                   <td>{order?.patient?.name} {order?.patient?.surname}</td>
                   <td>{order?.patient?.email}</td>
                   <td>{order?.kit?.name}</td>
                   <td>R{order?.kit?.price}</td>
+                  <td>{order?.paid == 1 ? 'Paid' : 'Not Paid'}</td>
                   <td>
                     <Link href={`/orders/${order?.id}`} className="btn btn-primary mb-3">View</Link>
                   </td>
