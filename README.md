@@ -19,6 +19,17 @@ To setup and Run the API follow these steps
     php artisan db:seed
 ``` 
 
+- For unit testing do the following
+- Run the migration and seeds for your testing db, set your db connection details in the .env.testing
+- Run the following commands
+```bash 
+    php artisan migrate --env=testing
+    php artisan db:seed --env=testing
+    php artisan test
+``` 
+
+
+
 
 
 # Front End setup
