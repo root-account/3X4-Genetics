@@ -1,7 +1,7 @@
 # 3X4-Genetics
 This is a very small CRUD project for managing orders, It makes use of PHP Laravel for the API and makes use of Next.js for the Front end.
 
-Initially I started the project purely in laravel using the laravel views and templating but along the way decided to give it a modern approach my separting the project into a Laravel API and a Next.js Frontend
+Initially I started the project purely in laravel using the laravel views and templating but along the way decided to give it a modern approach my separating the project into a Laravel API and a Next.js Frontend
 
 
 # API setup
