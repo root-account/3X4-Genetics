@@ -9,6 +9,8 @@ export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [kits, setKits] = useState([]);
 
+  const [patientName, setPatientName] = useState("");
+
   const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   const [formData, setFormData] = useState({
@@ -54,6 +56,26 @@ export default function Orders() {
     return formattedDateTime;
   }
 
+
+  
+// Check user by email 
+const checkEmailUser = async () => {
+  try {
+    const response = await axios.get(apiUrl+'/patient/'+formData?.patient_email);
+    const userData = response.data;
+    
+    setFormData({
+      patient_email: formData?.patient_email,
+      patient_name: userData?.name+' '+userData?.surname,
+      kit_id: formData?.kit_id,
+      paid: formData?.paid,
+    });
+    
+    setPatientName(userData?.name+' '+userData?.surname);
+  } catch (error) {
+    console.error('Error fetching user:', error);
+  }
+}
   // Fetch Orders  
   const fetchOrders = async () => {
     try {
@@ -114,11 +136,21 @@ export default function Orders() {
       console.log(formData);
       
     }
+
+    setPatientName("");
   };
 
   const handleInputChange = (e:any) => {
     const { name, value, type, checked } = e.target;
     const fieldValue = type === 'checkbox' ? checked : value;
+
+    if (name == 'patient_email') {
+      setPatientName("");
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        patient_name: "",
+      }));
+    }
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: fieldValue,
@@ -139,11 +171,11 @@ export default function Orders() {
                         <div className="row">
                             <div className="col">
                                 <label  className="visually">Patient Email</label>
-                                <input value={formData.patient_email} onChange={(e) => handleInputChange(e)} type="text" name='patient_email' className="form-control" id=""/>
+                                <input value={formData.patient_email} onBlur={() => checkEmailUser()} onChange={(e) => handleInputChange(e)} type="text" name='patient_email' className="form-control" id=""/>
                             </div>
                             <div className="col">
                                 <label className="visually">Patient name</label>
-                                <input type="text" value={formData.patient_name} onChange={(e) => handleInputChange(e)} name='patient_name' className="form-control" />
+                                <input type="text" value={formData.patient_name} disabled={patientName ? true : false} onChange={(e) => handleInputChange(e)} name='patient_name' className="form-control" />
                             </div>  
 
                             <div className="col">
