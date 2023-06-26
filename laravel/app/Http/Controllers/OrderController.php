@@ -19,7 +19,7 @@ class OrderController extends Controller
     {
         $orders = Order::with('kit', 'patient')->orderBy('created_at', 'desc')->get();
 
-        return response()->json($orders);
+        return response()->json($orders, 200);
     }
 
     // Get order by ID
@@ -27,7 +27,7 @@ class OrderController extends Controller
     {
         $order = Order::with('kit', 'patient')->find($id);
 
-        return response()->json($order);
+        return response()->json($order, 200);
     }
 
     // Create Order
@@ -52,7 +52,7 @@ class OrderController extends Controller
         $order->paid = $paid;
         $order->save();
 
-        return response()->json(['message' => 'Order created.']);
+        return response()->json(['message' => 'Order created.'], 200);
     }
 
 }

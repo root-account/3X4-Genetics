@@ -9,6 +9,8 @@ class Kit extends Model
 {
     use HasFactory;
 
+    protected $table = 'kits';
+
     public function orders()
     {
         return $this->hasMany(Order::class);

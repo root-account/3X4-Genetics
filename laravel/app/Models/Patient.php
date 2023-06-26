@@ -9,6 +9,8 @@ class Patient extends Model
 {
     use HasFactory;
 
+    protected $table = 'patients';
+
     /**
      * The attributes that are mass assignable.
      *
