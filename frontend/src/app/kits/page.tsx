@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 export default function Kits() {
-    
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [kits, setKits] = useState([]);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export default function Kits() {
   // Fetch Kits  
   const fetchKits = async () => {
     try {
-      const response = await axios.get('http://localhost/3x4-Genetics/laravel/public/api/kits');
+      const response = await axios.get(apiUrl+'/kits');
       const kitsData = response.data;
       setKits(kitsData);
       console.log(kitsData);

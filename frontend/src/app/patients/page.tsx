@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 export default function Patients() {
-    
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
   const [patients, setPatients] = useState([]);
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export default function Patients() {
   // Fetch Patients  
   const fetchPatients = async () => {
     try {
-      const response = await axios.get('http://localhost/3x4-Genetics/laravel/public/api/patient');
+      const response = await axios.get(apiUrl+'/patient');
       const patientsData = response.data;
       setPatients(patientsData);
       console.log(patientsData);

@@ -9,6 +9,8 @@ export default function Orders() {
   const [orders, setOrders] = useState([]);
   const [kits, setKits] = useState([]);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
   const [formData, setFormData] = useState({
     patient_email: '',
     patient_name: '',
@@ -35,7 +37,7 @@ export default function Orders() {
   // Fetch Orders  
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost/3x4-Genetics/laravel/public/api/orders');
+      const response = await axios.get(apiUrl+'/orders');
       const ordersData = response.data;
       setOrders(ordersData);
       console.log(ordersData);

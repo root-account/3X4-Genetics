@@ -8,9 +8,11 @@ import { useParams } from 'next/navigation'
 
 export default function OrderView() {
 
-  const params = useParams();
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+  const params = useParams();
   const id = params.id;
+
 
   const [order, setOrder] = useState([]);
 
@@ -25,7 +27,7 @@ export default function OrderView() {
   // Fetch order  
   const fetchOrder = async () => {
     try {
-      const response = await axios.get(`http://localhost/3x4-Genetics/laravel/public/api/orders/${id}`);
+      const response = await axios.get(`${apiUrl}/orders/${id}`);
       const orderData = response.data;
       setOrder(orderData);
       console.log(orderData);
