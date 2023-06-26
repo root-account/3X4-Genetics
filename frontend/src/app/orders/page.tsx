@@ -1,37 +1,125 @@
+"use client";
 import Image from 'next/image'
-// import Link from 'next/link'
+import Link from 'next/link'
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 
 export default function Orders() {
+    
+  const [orders, setOrders] = useState([]);
+  const [kits, setKits] = useState([]);
+
+  const [formData, setFormData] = useState({
+    patient_email: '',
+    patient_name: '',
+    kit_id: '',
+    paid: false,
+  });
+
+  useEffect(() => {
+    fetchOrders();
+    fetchKits();
+  }, []);
+
+  // Fetch Orders  
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get('http://localhost/3x4-Genetics/laravel/public/api/orders');
+      const ordersData = response.data;
+      setOrders(ordersData);
+      console.log(ordersData);
+      
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    }
+  };
+
+  // Fetch Kits for the dropdown   
+  const fetchKits = async () => {
+    try {
+      const response = await axios.get('http://localhost/3x4-Genetics/laravel/public/api/kits');
+      const kitsData = response.data;
+      setKits(kitsData);
+      console.log(kitsData);
+      
+    } catch (error) {
+      console.error('Error fetching Kits:', error);
+    }
+  };
+
+  const createOrder = async () => {
+
+    if (formData?.patient_email == "") {  
+        alert("Patient email  address is required.");
+
+        return;
+    }
+
+
+    try {
+      const response = await axios.post(
+        'http://localhost/3x4-Genetics/laravel/public/api/orders/create',
+        formData
+      );
+
+      console.log('Order created:', response.data);
+      // Reset the form after successful submission
+      setFormData({
+        patient_email: '',
+        patient_name: '',
+        kit_id: '',
+        paid: false,
+      });
+
+      fetchOrders();
+
+      alert("Order has been created.")
+
+    } catch (error) {
+      console.error('Error creating order:', error);
+      alert('Error creating order');
+    }
+  };
+
+  const handleInputChange = (e:any) => {
+    const { name, value, type, checked } = e.target;
+    const fieldValue = type === 'checkbox' ? checked : value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: fieldValue,
+    }));
+
+
+    console.log(name+' | '+fieldValue);
+    
+  };
+
+  
   return (
-
     <>
-        <h1>Orders</h1>
+      <h1>Orders</h1>
 
-        <button className="btn btn-outline-primary">New Order</button>
-        <br/>
-        <br/>
-        
-        {/* Create new Order */}
-        <div className='row'>
+      {/* Create new Order */}
+      <div className='row'>
             <div className='col-md-7'>
                 <div className='jumbotron'>
-                    <form>
+                    
                         <div className="row">
                             <div className="col">
-                                <label  className="visually">Patient email</label>
-                                <input type="text" className="form-control" id=""/>
+                                <label  className="visually">Patient Email</label>
+                                <input value={formData.patient_email} onChange={(e) => handleInputChange(e)} type="text" name='patient_email' className="form-control" id=""/>
                             </div>
                             <div className="col">
                                 <label className="visually">Patient name</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" value={formData.patient_name} onChange={(e) => handleInputChange(e)} name='patient_name' className="form-control" />
                             </div>  
 
                             <div className="col">
                                 <label className="visually">Kit</label>
-                                <select className="form-select" aria-label="Default select example">
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select className="form-select" value={formData.kit_id} onChange={(e) => handleInputChange(e)} name='kit_id' aria-label="Default select example">
+                                    {kits.map((kit, index) => (
+                                        <option key={index} value={kit?.id}>{kit?.name}</option>
+                                    ))}      
                                 </select>
                             </div>
                             
@@ -41,7 +129,7 @@ export default function Orders() {
                         <div className="row">
                             <div className="col">
                               <div className="form-check">
-                                <input className="form-check-input" type="checkbox" value="" id="flexCheckDefault"/>
+                                <input className="form-check-input" type="checkbox" checked={formData.paid} onChange={(e) => handleInputChange(e)} name="paid" id="flexCheckDefault"/>
                                 <label className="form-check-label" htmlFor="flexCheckDefault">
                                     Has paid
                                 </label>
@@ -52,50 +140,46 @@ export default function Orders() {
                         <br/>
                         {/* <br/> */}
                         <div className="col-auto">
-                            <button type="submit" className="btn btn-primary mb-3">Save order</button>
+                            <button  onClick={() => createOrder()} className="btn btn-outline-primary">Create New Order</button>
                         </div>
                         
-                    </form>
                 </div>
             </div>
         </div>
-        
-        <hr/>
+      <hr />
 
-        <div className='row'>
-            <div className='col'>
-            <table className="table table-striped">
-                <thead>
-                    <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Patient name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Product</th>
-                    <th scope="col">Price</th>
-                    <th scope="col"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        <td>
-                            <button type="submit" className="btn btn-primary mb-3">View</button>
-                        </td>
-                    </tr>
-                </tbody>
-                </table>
-            </div>
+      <div className='row'>
+        <div className='col'>
+          <table className="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Patient name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Product</th>
+                <th scope="col">Price</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order, index) => (
+                <tr key={order?.id}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{order?.created_at}</td>
+                  <td>{order?.patient?.name} {order?.patient?.surname}</td>
+                  <td>{order?.patient?.email}</td>
+                  <td>{order?.kit?.name}</td>
+                  <td>R{order?.kit?.price}</td>
+                  <td>
+                    <Link href={`/orders/${order?.id}`} className="btn btn-primary mb-3">View</Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-       
+      </div>
     </>
-    
-
-
   )
 }
