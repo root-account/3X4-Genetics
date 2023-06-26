@@ -105,11 +105,11 @@ const checkEmailUser = async () => {
   // Create an order
   const createOrder = async () => {
 
-    if (formData?.patient_email == "") {  
-        alert("Patient email  address is required.");
-
+    if (formData?.patient_email == "" || formData?.patient_name == "") {  
+        alert("Patient name and email  address are required.");
         return;
     }
+
 
     try {
       const response = await axios.post(
